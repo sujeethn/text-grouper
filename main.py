@@ -16,7 +16,8 @@ def print_hi(names):
         'This to test code',
         'This to test every code',
         'Not just test',
-        'Just test'
+        'Just test',
+        'This to test many code'
         ]
     vectorizer1 = CountVectorizer()
     X = vectorizer1.fit_transform(name)
@@ -29,9 +30,11 @@ def print_hi(names):
     spsimilar = np.split(similarity, 1)
     df1 = pd.DataFrame(spsimilar[0]) #,columns=['0','1','2','3'],index=['0','1','2','3'])
     print(df1)
-
+    dfo = pd.DataFrame()
+    dfoi = -1
     print('--------')
     groupi = 0
+    groupj = 0
     criteria = df1.iloc[:, ] >= .8
     for i,j in criteria.items():
         jj=0
@@ -39,7 +42,37 @@ def print_hi(names):
             if (j[jj]) :
                 if (i!=jj) :
                    # print ('True',i,jj)
-                    print('Group',groupi)
+                    if(dfo is None) :
+                        dfo.iloc[i][0] = 'Group1'
+                        dfo.iloc[jj][0] = 'Group1'
+                        print('dfo first',dfo)
+                  #  elif (np.isnan(dfo.iloc[i][0]) and (not (np.isnan(dfo.iloc[jj][0])))) :
+                   #     dfo.iloc[i][0] = dfo.iloc[jj][0]
+                    #elif (np.isnan(dfo.iloc[jj][0]) and not np.isnan(dfo.iloc[i][0])):
+                     #   dfo.iloc[jj][0] = dfo.iloc[i][0]
+
+                    #pos = dfo.iloc[:, ] == i
+                    #if(pos.empty ) :
+                     #   print('Pos', pos)
+                     #   groupj+=1
+                      #  dfo.loc[groupi, groupj] = jj
+
+                    #else :
+                      #  if dfo.empty :
+                     #       groupi = 0
+                     #       groupj = 0
+
+                      #      dfo.loc[groupi,groupj] = jj
+                      #  else :
+                      #      groupi+=1
+                      #      groupj+=1
+                       #     dfo.loc[groupi,groupj] = jj
+                    #if np.isnan(idx) or idx is None:
+                     #   dfo.loc[groupi, 0] = i
+                    #else :
+                     #   dfo.loc[groupi, idx + 1] = i
+                    #dfo[groupi][groupj] = i
+
                     print(name[i])
                     print(name[jj])
                     print('***************')
@@ -51,7 +84,7 @@ def print_hi(names):
 
     # Print the similarity score
     #print(similarity)
-
+    print (dfo)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
