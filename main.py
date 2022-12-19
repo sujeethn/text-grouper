@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import  pandas as pd
 import numpy as np
+import Levenshtein as Lv
 
 df = pd.DataFrame(columns=['0','1','2','3'])
 def print_hi(names):
@@ -86,8 +87,24 @@ def print_hi(names):
     #print(similarity)
     print (dfo)
 
+
+def text_grouper():
+
+
+    def calculate_similarity(text1, text2):
+        distance = Lv.distance(text1, text2)
+        similarity = 1 - (distance / max(len(text1), len(text2)))
+        return similarity
+
+    text1 = "This is the first text"
+    text2 = "This is the second text"
+    similarity = calculate_similarity(text1, text2)
+    print(similarity)
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm Charm is rhyme')
+    #print_hi('PyCharm Charm is rhyme')
+    text_grouper()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
