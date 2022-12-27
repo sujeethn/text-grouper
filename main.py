@@ -8,6 +8,7 @@ import  pandas as pd
 import numpy as np
 import Levenshtein as Lv
 
+
 df = pd.DataFrame(columns=['0','1','2','3'])
 def print_hi(names):
     # Use a breakpoint in the code line below to debug your script.
@@ -89,17 +90,121 @@ def print_hi(names):
 
 
 def text_grouper():
-
-
+   # import Levenshtein as Lv1
+    inputD = ['This is the first text','first [not] match','This is the not first text','first no match','not match','not a match','not an match', 'This is this first text']
+    dfinput = pd.DataFrame (inputD, columns = ['Text'])
+    dfoutput = pd.DataFrame()
+    dfoutindex = -1
+    a1 = np.array('Group1')
+    a2 = np.array('Group2')
+    a3 = np.array('Group 3')
     def calculate_similarity(text1, text2):
         distance = Lv.distance(text1, text2)
         similarity = 1 - (distance / max(len(text1), len(text2)))
         return similarity
 
-    text1 = "This is the first text"
-    text2 = "This is the second text"
-    similarity = calculate_similarity(text1, text2)
-    print(similarity)
+
+    def getIndexes(dfObj, value):
+        # Empty list
+        listOfPos = []
+
+        # isin() method will return a dataframe with
+        # boolean values, True at the positions
+        # where element exists
+        result = dfObj.isin([value])
+
+        # any() method will return
+        # a boolean series
+        seriesObj = result.any()
+
+        # Get list of columns where element exists
+        columnNames = list(seriesObj[seriesObj == True].index)
+
+        # Iterate over the list of columns and
+        # extract the row index where element exists
+        for col in columnNames:
+            rows = list(result[col][result[col] == True].index)
+
+            for row in rows:
+                listOfPos.append((row, col))
+
+        # This list contains a list tuples with
+        # the index of element in the dataframe
+        return listOfPos
+
+
+    def group_similar(iindex,jindex):
+        global dfoutindex
+        iloc = getIndexes(dfoutput,iindex)[0][0] if bool(getIndexes(dfoutput,iindex)) else 'NA'
+        jloc = getIndexes(dfoutput, jindex)[0][0] if bool(getIndexes(dfoutput, jindex)) else 'NA'
+      #  print('dfout',dfoutput)
+       # print('iloc',iloc)
+       # print('jloc',jloc)
+      #  print('iindex',iindex)
+       # print('jindex',jindex)
+
+
+        if (iloc == 'NA' and jloc == 'NA') :
+            if(dfoutput.empty):
+                dfoutindex = 0
+            else :
+                dfoutindex+=1
+
+            dfoutput.loc[dfoutindex,0]=iindex
+            dfoutput.loc[dfoutindex,1] = jindex
+
+       #     print('dfout2', dfoutput)
+
+        elif (iloc != jloc):
+            if (iloc != 'NA') :
+                dfoutput.loc[iloc, len(dfoutput.columns)] = jindex
+            elif (jloc !='NA') :
+                dfoutput.loc[jloc, len(dfoutput.columns)] = iindex
+         #   print('dfout3', dfoutput)
+
+
+    def finalout(input) :
+        print ('final out',dfoutput)
+        i1=0
+        while i1 < dfoutput.shape[0]:
+            print('Group ', i1)
+            j1 = 0
+            while j1 < dfoutput.shape[1]:
+               # print ('final1',i1,'j',j1,'out',dfoutput.loc[i1][j1])
+                if(not pd.isnull(dfoutput.loc[i1][j1])):
+                   print( dfinput.iloc[int(dfoutput.loc[i1][j1])]['Text'])
+                j1+=1
+            i1+=1
+
+
+    i=0
+    while i < dfinput.shape[0] :
+    #    print('inside i',i)
+        j=0
+        while j < dfinput.shape[0]:
+            if i != j :
+                similarity = calculate_similarity(dfinput.iloc[i]['Text'], dfinput.iloc[j]['Text'])
+       #         print(f'1:',dfinput.iloc[i]['Text'],'2:', dfinput.iloc[j]['Text'])
+       #         print('Similar',similarity)
+                if similarity > 0.8 :
+                    group_similar(i,j)
+            j+=1
+        i+=1
+
+    print('Input',dfinput)
+   # print(getIndexes(dfinput,'first text jj this is')[0] if bool(getIndexes(dfinput,'first text jj this is')) else 'NA')
+
+
+    finalout('test')
+
+
+    #text1 = "This is the first text"
+    #text2 = "This is the not first text"
+    #similarity = calculate_similarity(text1, text2)
+    #print(similarity)
+
+
+
 
 
 # Press the green button in the gutter to run the script.
