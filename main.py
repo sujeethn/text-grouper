@@ -15,6 +15,7 @@ def text_grouper():
     dfinput = pd.DataFrame (inputD, columns = ['Text'])
     dfoutput = pd.DataFrame()
     dfoutindex = -1
+    sensitivity = 0.8
 
     def calculate_similarity(text1, text2):
         distance = Lv.distance(text1, text2)
@@ -82,10 +83,10 @@ def text_grouper():
 
 
     def finalout() :
-        print ('final out',dfoutput)
+    #    print ('final out',dfoutput)
         i1=0
         while i1 < dfoutput.shape[0]:
-            print('Group ', i1)
+            print('Similar Group ', i1+1,'---------------')
             j1 = 0
             while j1 < dfoutput.shape[1]:
                # print ('final1',i1,'j',j1,'out',dfoutput.loc[i1][j1])
@@ -104,13 +105,16 @@ def text_grouper():
                 similarity = calculate_similarity(dfinput.iloc[i]['Text'], dfinput.iloc[j]['Text'])
        #         print(f'1:',dfinput.iloc[i]['Text'],'2:', dfinput.iloc[j]['Text'])
        #         print('Similar',similarity)
-                if similarity > 0.8 :
+                if similarity > sensitivity :
                     group_similar(i,j)
             j+=1
         i+=1
 
-    print('Input',dfinput)
+    print('Input***********')
+    print(dfinput)
 
+
+    print('Output**********')
     finalout()
 
 
